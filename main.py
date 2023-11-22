@@ -1,20 +1,61 @@
-import numpy as np
+import re
 
-# Given data
-hash_values = [
-    "9b713a2ce3a9842c39fa058ea9e364495c6a641df3e9ddf797d40c563758e237",
-    "945d7dbf62f99a7edb36e47ce279b1d2ad809893a181a7c40733e2de29281b01",
-    "6ca72e1d72eb679c5b23098ed5194d78efbfff257e1a319fc3ad91ef322f33cc"
-]
+def process_hash(original_hash):
+    text = original_hash[:8]
 
-generated_numbers = [2.91, 2.34, 1.73]
+    if re.match(re.compile(r"\d[A-F]\d{4}[A-F]\d"), text):
+        return 1.38
+    elif re.match(re.compile(r"\d{3}[A-F]\d[A-F]\d{2}"), text):
+        return 1.05
+    elif re.match(re.compile(r"[A-F]\d{3}[A-F]\d{2}[A-F]"), text):
+        return 1.25
+    elif re.match(re.compile(r"[A-F]\d[A-F]\d{5}"), text):
+        return 1.29
+    elif re.match(re.compile(r"\d{3}[A-F]{3}\d{2}"), text):
+        return 1.08
+    elif re.match(re.compile(r"[A-F]\d{7}"), text):
+        return 1.4
+    elif re.match(re.compile(r"\d{8}"), text):
+        return 6540.14
+    elif re.match(re.compile(r"\d{2}[A-F]\d[A-F]\d[A-F]{2}"), text):
+        return 251.78
+    elif re.match(re.compile(r"[A-F]{2}\d{4}[A-F]{2}"), text):
+        return 47.32
+    elif re.match(re.compile(r"[A-F]{2}\d{5}[A-F]"), text):
+        return 1.62
+    elif re.match(re.compile(r"\d{3}[A-F]\d{4}"), text):
+        return 5.47
+    elif re.match(re.compile(r"\d[A-F]\d[A-F]\d[A-F]{2}\d"), text):
+        return 5.31
+    elif re.match(re.compile(r"[A-F]\d[A-F]{2}\d{4}"), text):
+        return 15.53
+    elif re.match(re.compile(r"\d[A-F]\d[A-F]{2}\d[A-F]{2}"), text):
+        return 52.3
+    elif re.match(re.compile(r"\d[A-F]\d[A-F]\d[A-F]\d[A-F]"), text):
+        return 12
+    elif re.match(re.compile(r"[A-F]\d{5}[A-F]\d"), text):
+        return 1.2
+    elif re.match(re.compile(r"\d{2}[A-F]{2}\d{4}"), text):
+        return 18.05
+    elif re.match(re.compile(r"\d{2}[A-F]\d{3}[A-F]\d"), text):
+        return 6.05
+    elif re.match(re.compile(r"\d[A-F]\d{2}[A-F]{3}\d"), text):
+        return 21.88
+    else:
+        return None
 
-# Convert hash values to integers
-hash_integers = [int(hash_value, 16) for hash_value in hash_values]
+# Loop to prompt the user for input
+while True:
+    # Get input from the user
+    original_hash = input("Enter the original hash (type 'exit' to stop): ")
 
-# Calculate the correlation coefficient
-correlation_coefficient = np.corrcoef(hash_integers, generated_numbers)[0, 1]
+    # Check if the user wants to exit
+    if original_hash.lower() == 'exit':
+        break
 
-# Print the result
-print(f"Correlation Coefficient: {correlation_coefficient}")
-
+    # Process the hash and print the result
+    result = process_hash(original_hash)
+    if result is not None:
+        print("Result:", result)
+    else:
+        print("Not a match")
